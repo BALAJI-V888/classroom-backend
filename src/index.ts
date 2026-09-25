@@ -1,19 +1,23 @@
+import 'dotenv/config';
 import express from "express";
+import subjectsRouter from './routes/subjects';
+import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 
-//defining express router
-const router  = express.Router();
+app.use(cors({
+    origin : process.env.FRONTEND_URL,
+    methods : ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials : true
+}))
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Welcome to the classroom backend API!");
+app.use('/api/subjects', subjectsRouter);
+
+app.get('/', (req, res) => {
+    res.send("Welcome to the backend API");
 })
 
-
-
-app.listen(port, () =>
-    { console.log(`Server running on port http://localhost:${port}`)
-    });
+app.listen(PORT, () => console.log(`Server listening on port http://localhost:${PORT}`));
